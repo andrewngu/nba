@@ -2,6 +2,7 @@ import requests
 import time
 from constants import request_headers
 from db import cur, db
+from game import scrape_games_by_year
 from team_details import scrape_team_details
 from team_players import scrape_team_players
 from utils import get_year_string
@@ -27,6 +28,7 @@ def insert_team_stats_by_year(headers, rows, year):
         scrape_team_details(team['id'], team['name'])
         insert_team_stats(headers, team, team_stats, year)
         scrape_team_players(team['id'], team['name'], year)
+        scrape_games_by_year(team['id'], team['name'], year)
         time.sleep(2)
 
 
