@@ -15,7 +15,6 @@ schemas['game'] = '''
 CREATE TABLE IF NOT EXISTS `game` (
     `id` varchar(16) NOT NULL,
     `date` varchar(128) NOT NULL,
-    `time` varchar(128) NOT NULL,
     `home_team_id` int(16) NOT NULL,
     `visitor_team_id` int(16) NOT NULL,
     PRIMARY KEY (`id`)

@@ -15,14 +15,21 @@ def fetch_games_by_year(team_id, year):
     return rows
 
 
-def scrape_game(team_name, row, year):
-    game_id = row[1]
-    scrape_game_details(game_id, team_name, year)
+def scrape_game(game_id, team_name, year):
     scrape_game_stats(game_id, team_name, year)
+    scrape_game_details(game_id, team_name, year)
+
+
+def scrape_game_if_needed(team_name, row, year):
+    game_id = row[1]
+    cur.execute("SELECT id FROM game WHERE id = %s" % game_id)
+    data = cur.fetchall()
+    if len(data) == 0:
+        scrape_game(game_id, team_name, year)
 
 
 def scrape_games_by_year(team_id, team_name, year):
     print "scraping games for %s %s" % (year, team_name)
     rows = fetch_games_by_year(team_id, year)
     for row in rows:
-        scrape_game(team_name, row, year)
+        scrape_game_if_needed(team_name, row, year)

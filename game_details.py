@@ -7,10 +7,12 @@ def fetch_game_details(game_id):
     url = 'https://stats.nba.com/stats/boxscoresummaryv2?GameID=' + game_id
     r = requests.get(url, headers=request_headers)
     result_json = r.json()
-    for result_set in result_json['resultSets']:
-        if result_set['name'] == 'GameSummary':
-            row = result_set['rowSet'][0]
-            return row
+    if 'resultSets' in result_json:
+        for result_set in result_json['resultSets']:
+            if result_set['name'] == 'GameSummary':
+                row = result_set['rowSet'][0]
+                return row
+    return None
 
 
 def insert_game_details(game_id, row):
@@ -23,4 +25,5 @@ def insert_game_details(game_id, row):
 def scrape_game_details(game_id, team_name, year):
     print 'scraping details for %s %s game %s' % (year, team_name, game_id)
     row = fetch_game_details(game_id)
-    insert_game_details(game_id, row)
+    if row is not None:
+        insert_game_details(game_id, row)

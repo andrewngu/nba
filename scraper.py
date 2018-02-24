@@ -8,7 +8,7 @@ def main():
     load_mysql_schema()
 
     for i in range(20):
-        year = 2017 - i
+        year = 2012 - i
         print '============================='
         print 'scraping data for %s...' % year
         scrape_team_stats_by_year(year)
