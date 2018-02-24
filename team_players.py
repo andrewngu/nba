@@ -31,6 +31,7 @@ def insert_team_players(rows, team_id, year):
         db.commit()
 
 
-def scrape_team_players(team_id, year):
+def scrape_team_players(team_id, team_name, year):
+    print 'scraping team players for %s %s...' % (year, team_name)
     rows = fetch_team_players(team_id, year)
     insert_team_players(rows, team_id, year)

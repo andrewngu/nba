@@ -21,6 +21,7 @@ def insert_team_details(headers, row):
     db.commit()
 
 
-def scrape_team_details(team_id):
+def scrape_team_details(team_id, team_name):
+    print 'scraping team details for %s...' % team_name
     headers, row = fetch_team_details(team_id)
     insert_team_details(headers, row)

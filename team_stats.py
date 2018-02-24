@@ -24,27 +24,26 @@ def insert_team_stats_by_year(headers, rows, year):
     load_team_stats_schema(headers)
     for row in rows:
         team, team_stats = parse_team_row(row)
-        scrape_team_details(team['id'])
+        scrape_team_details(team['id'], team['name'])
         insert_team_stats(headers, team, team_stats, year)
-        scrape_team_players(team['id'], year)
-        time.sleep(5)
+        scrape_team_players(team['id'], team['name'], year)
+        time.sleep(2)
 
 
 def insert_team_stats(headers, team, team_stats, year):
-    query = 'INSERT IGNORE INTO team_yearly_stats (team_id, year,'
+    query = 'INSERT IGNORE INTO team_stats (team_id, year,'
     query += ', '.join(headers)
     query += ') VALUES (%d, %d,'
     query += ', '.join('%f' for x in headers)
     query += ')'
-
     values = (team['id'], year) + tuple(team_stats)
-
     cur.execute(query % values)
     db.commit()
 
+
 def load_team_stats_schema(headers):
     query = '''
-CREATE TABLE IF NOT EXISTS `team_yearly_stats` (
+CREATE TABLE IF NOT EXISTS `team_stats` (
     `team_id` int(16) NOT NULL,
     `year` int(4) NOT NULL,
     '''
@@ -66,6 +65,7 @@ def parse_team_row(row):
 
 
 def scrape_team_stats_by_year(year):
+    print "scraping team stats for %s..." % str(year)
     headers, rows = fetch_team_stats_by_year(year)
     insert_team_stats_by_year(headers, rows, year)
 
